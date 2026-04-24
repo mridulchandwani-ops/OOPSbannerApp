@@ -1,57 +1,54 @@
-class OOPSBannerApp
-{
-   /**
-     * UC7: Static Inner Class to encapsulate character patterns.
-     * This follows the Single Responsibility Principle.
-     */
-    public static class CharacterPattern {
-        private final char character;
-        private final String[] pattern;
+import java.util.HashMap;
+import java.util.Map;
 
-        // Constructor
-        public CharacterPattern(char character, String[] pattern) {
-            this.character = character;
-            this.pattern = pattern;
-        }
+public class OOPSBannerApp {
 
-        // Getter for the pattern array
-        public String[] getPattern() {
-            return pattern;
-        }
+    // Centralized Map to store character-to-pattern mappings
+    private static final Map<Character, String[]> patternMap = new HashMap<>();
 
-        public char getCharacter() {
-            return character;
-        }
+    static {
+        // Initialize the centralized repository (Key-Value pairs)
+        patternMap.put('O', new String[]{
+            " ***** ", "* *", "* *", "* *", "* *", "* *", " ***** "
+        });
+        patternMap.put('P', new String[]{
+            "****** ", "* *", "* *", "****** ", "* ", "* ", "* "
+        });
+        patternMap.put('S', new String[]{
+            " ***** ", "* ", "* ", " ***** ", "      *", "      *", " ***** "
+        });
     }
 
     public static void main(String[] args) {
-        // Initialize our "Library" of character patterns
-        CharacterPattern charO = new CharacterPattern('O', new String[]{
-            " ***** ", "* *", "* *", "* *", "* *", "* *", " ***** "
-        });
-
-        CharacterPattern charP = new CharacterPattern('P', new String[]{
-            "***** ", "* * ", "* * ", "***** ", "* ", "* ", "* "
-        });
-
-        CharacterPattern charS = new CharacterPattern('S', new String[]{
-            " ***** ", "* ", "* ", " ***** ", "      *", "      *", " ***** "
-        });
-
-        // Store the sequence we want to display
-        CharacterPattern[] oopsSequence = { charO, charO, charP, charS };
-
-        // UC7: Using StringBuilder and loop-based rendering for a horizontal banner
-        System.out.println("--- UC7 Object-Oriented Horizontal Banner ---");
+        String word = "OOPS";
         
-        for (int i = 0; i < 7; i++) { // For each of the 7 lines
-            StringBuilder lineBuilder = new StringBuilder();
+        System.out.println("--- UC8: Final Scalable Banner App ---");
+        renderBanner(word);
+    }
+
+    /**
+     * UC8: Centralized rendering function.
+     * Separates the "Display Logic" from the "Pattern Storage."
+     */
+    public static void renderBanner(String input) {
+        char[] chars = input.toUpperCase().toCharArray();
+
+        // Standard 7-line ASCII height
+        for (int i = 0; i < 7; i++) {
+            StringBuilder lineResult = new StringBuilder();
             
-            for (CharacterPattern cp : oopsSequence) { // For each character in the word
-                lineBuilder.append(cp.getPattern()[i]).append("  "); // Add pattern + spacing
+            for (char c : chars) {
+                // Efficient retrieval using HashMap
+                String[] pattern = patternMap.getOrDefault(c, getEmptyPattern());
+                lineResult.append(pattern[i]).append("  ");
             }
             
-            System.out.println(lineBuilder.toString());
+            System.out.println(lineResult.toString());
         }
+    }
+
+    // Fallback for characters not in the map
+    private static String[] getEmptyPattern() {
+        return new String[]{"       ", "       ", "       ", "       ", "       ", "       ", "       "};
     }
 }
